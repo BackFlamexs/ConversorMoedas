@@ -607,6 +607,27 @@
   text-transform: uppercase;
 }
 
+.sort-header-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sort-header-button:hover {
+  color: var(--accent);
+}
+
+.sort-header-button span {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
 .history-table tbody tr:last-child td {
   border-bottom: 0;
 }

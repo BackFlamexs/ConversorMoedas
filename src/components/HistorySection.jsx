@@ -26,6 +26,7 @@ function HistorySection({ fromCurrency, toCurrency }) {
   const [selectedPeriod, setSelectedPeriod] = useState('7d')
   const [history, setHistory] = useState([])
   const [filters, setFilters] = useState({ startDate: '', endDate: '', minRate: '', maxRate: '' })
+  const [sortConfig, setSortConfig] = useState({ field: 'date', direction: 'desc' })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadCount, setReloadCount] = useState(0)
@@ -79,6 +80,13 @@ function HistorySection({ fromCurrency, toCurrency }) {
 
       return matchesStartDate && matchesEndDate && matchesMinRate && matchesMaxRate
     })
+  const sortedHistory = [...filteredHistory].sort((firstRecord, secondRecord) => {
+    const comparison = sortConfig.field === 'date'
+      ? firstRecord.date.localeCompare(secondRecord.date)
+      : firstRecord.rate - secondRecord.rate
+
+    return sortConfig.direction === 'asc' ? comparison : -comparison
+  })
   const hasActiveFilters = Object.values(filters).some(Boolean)
 
   function handleFilterChange(event) {
@@ -88,6 +96,18 @@ function HistorySection({ fromCurrency, toCurrency }) {
 
   function clearFilters() {
     setFilters({ startDate: '', endDate: '', minRate: '', maxRate: '' })
+  }
+
+  function handleSort(field) {
+    setSortConfig((currentSort) => ({
+      field,
+      direction: currentSort.field === field && currentSort.direction === 'asc' ? 'desc' : 'asc',
+    }))
+  }
+
+  function getSortIndicator(field) {
+    if (sortConfig.field !== field) return '↕'
+    return sortConfig.direction === 'asc' ? '↑' : '↓'
   }
 
   return (
@@ -217,14 +237,22 @@ function HistorySection({ fromCurrency, toCurrency }) {
                 <table className="history-table">
                   <thead>
                     <tr>
-                      <th scope="col">Data</th>
+                      <th scope="col" aria-sort={sortConfig.field === 'date' ? (sortConfig.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                        <button className="sort-header-button" type="button" onClick={() => handleSort('date')}>
+                          Data <span aria-hidden="true">{getSortIndicator('date')}</span>
+                        </button>
+                      </th>
                       <th scope="col">Moeda de origem</th>
                       <th scope="col">Moeda de destino</th>
-                      <th scope="col">Cotação</th>
+                      <th scope="col" aria-sort={sortConfig.field === 'rate' ? (sortConfig.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                        <button className="sort-header-button" type="button" onClick={() => handleSort('rate')}>
+                          Cotação <span aria-hidden="true">{getSortIndicator('rate')}</span>
+                        </button>
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredHistory.length > 0 ? filteredHistory.map((record) => (
+                    {sortedHistory.length > 0 ? sortedHistory.map((record) => (
                         <tr key={`${record.date}-${record.base}-${record.quote}`}>
                           <td>{formatDate(record.date)}</td>
                           <td>{record.base || fromCurrency}</td>
