@@ -1,19 +1,45 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ResultPanel from './ResultPanel.jsx'
-
-const demoRatesInBrl = {
-  BRL: 1,
-  USD: 5.7,
-  EUR: 6.1,
-  GBP: 7.2,
-}
+import { getLatestRate } from '../services/frankfurter.js'
 
 function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initialFromCurrency, initialToCurrency }) {
   const [amount, setAmount] = useState(initialAmount)
   const [fromCurrency, setFromCurrency] = useState(initialFromCurrency)
   const [toCurrency, setToCurrency] = useState(initialToCurrency)
+  const [exchangeRate, setExchangeRate] = useState(null)
+  const [isLoadingRate, setIsLoadingRate] = useState(true)
+  const [rateError, setRateError] = useState('')
+  const [rateReloadCount, setRateReloadCount] = useState(0)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    let isActive = true
+
+    async function loadRate() {
+      setIsLoadingRate(true)
+      setRateError('')
+      setExchangeRate(null)
+
+      if (fromCurrency === toCurrency) {
+        setExchangeRate({ base: fromCurrency, quote: toCurrency, rate: 1, date: null })
+        setIsLoadingRate(false)
+        return
+      }
+
+      try {
+        const rateData = await getLatestRate(fromCurrency, toCurrency)
+        if (isActive) setExchangeRate(rateData)
+      } catch (fetchError) {
+        if (isActive) setRateError(fetchError.message || 'Ocorreu um erro ao carregar a cotação.')
+      } finally {
+        if (isActive) setIsLoadingRate(false)
+      }
+    }
+
+    loadRate()
+    return () => { isActive = false }
+  }, [fromCurrency, toCurrency, rateReloadCount])
 
   function handleConvert(event) {
     event.preventDefault()
@@ -25,13 +51,13 @@ function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initial
       return
     }
 
-    if (!demoRatesInBrl[fromCurrency] || !demoRatesInBrl[toCurrency]) {
+    if (!exchangeRate) {
       setResult(null)
-      setError('A conversão para essa moeda será habilitada quando conectarmos as cotações reais.')
+      setError('Aguarde uma cotação válida para realizar a conversão.')
       return
     }
 
-    const convertedAmount = numericAmount * demoRatesInBrl[fromCurrency] / demoRatesInBrl[toCurrency]
+    const convertedAmount = numericAmount * exchangeRate.rate
     setResult(convertedAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
     setError('')
   }
@@ -45,14 +71,20 @@ function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initial
   function handleFromCurrencyChange(event) {
     setFromCurrency(event.target.value)
     setResult(null)
+    setError('')
   }
 
   function handleToCurrencyChange(event) {
     setToCurrency(event.target.value)
     setResult(null)
+    setError('')
   }
 
   const currenciesDisabled = isLoadingCurrencies || currencies.length === 0
+  const convertDisabled = currenciesDisabled || isLoadingRate || !exchangeRate
+  const formattedQuoteDate = exchangeRate?.date
+    ? new Date(`${exchangeRate.date}T00:00:00`).toLocaleDateString('pt-BR')
+    : null
 
   return (
     <form onSubmit={handleConvert}>
@@ -82,13 +114,20 @@ function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initial
         </div>
       </div>
 
-      <button className="convert-button" type="submit" disabled={currenciesDisabled}>Converter</button>
+      <button className="convert-button" type="submit" disabled={convertDisabled}>
+        {isLoadingRate ? 'Consultando cotação...' : 'Converter'}
+      </button>
       {error && <p className="form-error" role="alert">{error}</p>}
 
       <ResultPanel
         targetCurrency={toCurrency}
         result={result}
-        message="A lista de moedas vem da API. As taxas usadas nesta etapa ainda são demonstrativas."
+        baseCurrency={fromCurrency}
+        exchangeRate={exchangeRate?.rate}
+        quoteDate={formattedQuoteDate}
+        isLoadingRate={isLoadingRate}
+        rateError={rateError}
+        onRetryRate={() => setRateReloadCount((count) => count + 1)}
       />
     </form>
   )

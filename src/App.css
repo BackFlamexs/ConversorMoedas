@@ -345,6 +345,20 @@
   margin: 0;
 }
 
+.rate-note p + p {
+  margin-top: 4px;
+}
+
+.retry-rate-button {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .rate-icon {
   width: 17px;
   height: 17px;
