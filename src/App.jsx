@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
 import ConverterForm from './components/ConverterForm.jsx'
+import HistorySection from './components/HistorySection.jsx'
 import PageFooter from './components/PageFooter.jsx'
 import { getCurrencies } from './services/frankfurter.js'
 import './App.css'
@@ -91,6 +92,8 @@ function App() {
           <span>Lista de moedas obtida pela API Frankfurter</span>
         </div>
       </section>
+
+      <HistorySection fromCurrency={fromCurrency} toCurrency={toCurrency} />
 
       <PageFooter projectName="CONVERSOR DE MOEDAS" description="Um projeto de aprendizado em React" />
     </main>

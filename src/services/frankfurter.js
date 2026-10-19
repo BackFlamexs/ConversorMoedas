@@ -36,3 +36,27 @@ export async function getLatestRate(baseCurrency, quoteCurrency) {
 
   return data
 }
+
+export async function getHistoricalRates(baseCurrency, quoteCurrency, startDate, endDate) {
+  const query = new URLSearchParams({
+    from: startDate,
+    to: endDate,
+    base: baseCurrency,
+    quotes: quoteCurrency,
+  })
+  const response = await fetch(`${API_BASE_URL}/rates?${query}`)
+
+  if (!response.ok) {
+    throw new Error(`Não foi possível carregar o histórico (HTTP ${response.status}).`)
+  }
+
+  const data = await response.json()
+
+  if (!Array.isArray(data)) {
+    throw new Error('A resposta do histórico está em um formato inesperado.')
+  }
+
+  return data
+    .filter((item) => item.date && typeof item.rate === 'number')
+    .sort((firstItem, secondItem) => firstItem.date.localeCompare(secondItem.date))
+}
