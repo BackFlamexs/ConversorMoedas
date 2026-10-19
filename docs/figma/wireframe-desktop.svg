@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1500" viewBox="0 0 1440 1500">
+  <rect width="1440" height="1500" fill="#fff"/>
+  <g font-family="Arial, sans-serif" fill="#20252b">
+    <text x="80" y="54" font-size="24" font-weight="700">CÂMBIO</text><text x="1120" y="54" font-size="14">CONVERSOR DE MOEDAS</text>
+    <path d="M80 80H1360" stroke="#b9c0c8"/>
+    <text x="80" y="145" font-size="14">SIMPLES, CLARO E ATUALIZADO</text>
+    <text x="80" y="210" font-size="46" font-weight="700">Seu dinheiro, em qualquer moeda.</text>
+    <text x="80" y="250" font-size="18">Converta valores e acompanhe as taxas de câmbio.</text>
+    <rect x="80" y="290" width="1280" height="330" rx="16" fill="#f7f8fa" stroke="#aeb6bf"/>
+    <text x="112" y="335" font-size="24" font-weight="700">Faça uma conversão</text>
+    <text x="112" y="385" font-size="15">Você envia</text><text x="748" y="385" font-size="15">Você recebe</text>
+    <rect x="112" y="402" width="540" height="74" rx="8" fill="#fff" stroke="#aeb6bf"/><rect x="748" y="402" width="540" height="74" rx="8" fill="#fff" stroke="#aeb6bf"/>
+    <text x="136" y="449" font-size="24">100</text><text x="570" y="449" font-size="18">BRL ▾</text><text x="778" y="449" font-size="24">—</text><text x="1200" y="449" font-size="18">USD ▾</text>
+    <text x="680" y="448" font-size="24">↔</text>
+    <rect x="112" y="510" width="1176" height="52" rx="8" fill="#d9dde2"/><text x="680" y="543" text-anchor="middle" font-size="16">Converter</text>
+    <text x="112" y="594" font-size="14">Taxa e data da cotação aparecem após a conversão.</text>
+    <text x="80" y="700" font-size="28" font-weight="700">Histórico de cotações</text>
+    <text x="80" y="738" font-size="15">Acompanhe a evolução do par selecionado.</text>
+    <rect x="80" y="770" width="1280" height="86" rx="12" fill="#f7f8fa" stroke="#aeb6bf"/>
+    <text x="110" y="805" font-size="14">MOEDAS</text><text x="110" y="837" font-size="17">BRL → USD ▾</text>
+    <text x="430" y="805" font-size="14">PERÍODO</text><text x="430" y="837" font-size="17">30 dias ▾</text>
+    <text x="700" y="820" font-size="14">7d　15d　30d　3m　6m　1a　5a　10a</text>
+    <rect x="80" y="880" width="1280" height="350" rx="12" fill="#fff" stroke="#aeb6bf"/>
+    <text x="112" y="920" font-size="20" font-weight="700">Variação da cotação</text><text x="112" y="1090" font-size="15">[ gráfico de linha com eixo de datas e eixo de cotação ]</text>
+    <path d="M150 1170L330 1120L500 1140L700 1030L880 1060L1080 970L1280 1000" fill="none" stroke="#727b85" stroke-width="3"/>
+    <text x="80" y="1280" font-size="24" font-weight="700">Dados do período</text>
+    <rect x="80" y="1310" width="1280" height="62" rx="8" fill="#f7f8fa" stroke="#aeb6bf"/>
+    <text x="105" y="1348" font-size="14">Data inicial ▾　Data final ▾　Cotação mínima　Cotação máxima　[Filtrar] [Limpar] [Exportar CSV]</text>
+    <rect x="80" y="1388" width="1280" height="82" rx="8" fill="#fff" stroke="#aeb6bf"/>
+    <text x="105" y="1420" font-size="14" font-weight="700">DATA　　　　　 ORIGEM　　 DESTINO　　 COTAÇÃO　　ORDENAR ↕</text>
+    <text x="105" y="1450" font-size="14">18/10/2026　　 BRL　　　　 USD　　　　 0,18</text>
+  </g>
+</svg>
