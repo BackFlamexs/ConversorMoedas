@@ -492,6 +492,12 @@
   color: var(--text-primary);
 }
 
+.history-chart {
+  width: 100%;
+  height: 320px;
+  margin-top: 20px;
+}
+
 .history-error p {
   margin: 0 0 8px;
 }
@@ -571,5 +577,11 @@
 
   .history-card {
     padding: 20px 18px;
+  }
+
+  .history-chart {
+    height: 260px;
+    margin-left: -6px;
+    width: calc(100% + 12px);
   }
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { getHistoricalRates } from '../services/frankfurter.js'
 import { getDateRange } from '../utils/dateRanges.js'
 
@@ -15,6 +16,10 @@ const periods = [
 
 function formatDate(date) {
   return new Date(`${date}T00:00:00`).toLocaleDateString('pt-BR')
+}
+
+function formatChartDate(date) {
+  return new Date(`${date}T00:00:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
 }
 
 function HistorySection({ fromCurrency, toCurrency }) {
@@ -100,11 +105,55 @@ function HistorySection({ fromCurrency, toCurrency }) {
         )}
 
         {!isLoading && !error && history.length > 0 && (
-          <div className="history-summary">
-            <p><strong>{history.length}</strong> registros recebidos da API</p>
-            <p>Intervalo retornado: {formatDate(firstRecord.date)} a {formatDate(lastRecord.date)}</p>
-            <p>Cotação mais recente no intervalo: {lastRecord.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })} {toCurrency}</p>
-          </div>
+          <>
+            <div className="history-summary">
+              <p><strong>{history.length}</strong> registros recebidos da API</p>
+              <p>Intervalo retornado: {formatDate(firstRecord.date)} a {formatDate(lastRecord.date)}</p>
+              <p>Cotação mais recente no intervalo: {lastRecord.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })} {toCurrency}</p>
+            </div>
+
+            <div className="history-chart" role="img" aria-label={`Gráfico histórico de ${fromCurrency} para ${toCurrency}`}>
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={history} margin={{ top: 18, right: 12, bottom: 4, left: 4 }}>
+                  <CartesianGrid stroke="#dbe6f1" strokeDasharray="4 5" vertical={false} />
+                  <XAxis
+                    dataKey="date"
+                    tickFormatter={formatChartDate}
+                    tick={{ fill: '#71869b', fontSize: 11 }}
+                    tickLine={false}
+                    axisLine={false}
+                    minTickGap={32}
+                  />
+                  <YAxis
+                    dataKey="rate"
+                    domain={['auto', 'auto']}
+                    tickFormatter={(value) => Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 4 })}
+                    tick={{ fill: '#71869b', fontSize: 11 }}
+                    tickLine={false}
+                    axisLine={false}
+                    width={58}
+                  />
+                  <Tooltip
+                    labelFormatter={(date) => formatDate(date)}
+                    formatter={(value) => [
+                      `${Number(value).toLocaleString('pt-BR', { maximumFractionDigits: 6 })} ${toCurrency}`,
+                      `1 ${fromCurrency}`,
+                    ]}
+                    contentStyle={{ borderRadius: 10, borderColor: '#d7e3ef' }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="rate"
+                    name={`${fromCurrency}/${toCurrency}`}
+                    stroke="#2563eb"
+                    strokeWidth={3}
+                    dot={false}
+                    activeDot={{ r: 5, strokeWidth: 2, fill: '#ffffff' }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </>
         )}
       </div>
     </section>
