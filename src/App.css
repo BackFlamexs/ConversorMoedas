@@ -132,6 +132,42 @@
   font-size: 0.75rem;
 }
 
+.api-status,
+.api-error {
+  margin: 22px 0 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.api-status {
+  background: #edf4fc;
+  color: var(--text-secondary);
+}
+
+.api-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #991b1b;
+}
+
+.api-error p {
+  margin: 0;
+}
+
+.api-error button {
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .conversion-fields {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
@@ -242,6 +278,12 @@
 .convert-button:hover {
   background: #1d4ed8;
   transform: translateY(-1px);
+}
+
+.convert-button:disabled {
+  background: #93b4ec;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .form-error {
@@ -364,6 +406,11 @@
 
   .date-badge {
     font-size: 0.66rem;
+  }
+
+  .api-error {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .conversion-fields {

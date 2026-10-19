@@ -8,7 +8,7 @@ const demoRatesInBrl = {
   GBP: 7.2,
 }
 
-function ConverterForm({ currencies, initialAmount, initialFromCurrency, initialToCurrency }) {
+function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initialFromCurrency, initialToCurrency }) {
   const [amount, setAmount] = useState(initialAmount)
   const [fromCurrency, setFromCurrency] = useState(initialFromCurrency)
   const [toCurrency, setToCurrency] = useState(initialToCurrency)
@@ -17,7 +17,6 @@ function ConverterForm({ currencies, initialAmount, initialFromCurrency, initial
 
   function handleConvert(event) {
     event.preventDefault()
-
     const numericAmount = Number(amount)
 
     if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
@@ -26,11 +25,14 @@ function ConverterForm({ currencies, initialAmount, initialFromCurrency, initial
       return
     }
 
+    if (!demoRatesInBrl[fromCurrency] || !demoRatesInBrl[toCurrency]) {
+      setResult(null)
+      setError('A conversão para essa moeda será habilitada quando conectarmos as cotações reais.')
+      return
+    }
+
     const convertedAmount = numericAmount * demoRatesInBrl[fromCurrency] / demoRatesInBrl[toCurrency]
-    setResult(convertedAmount.toLocaleString('pt-BR', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }))
+    setResult(convertedAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
     setError('')
   }
 
@@ -50,27 +52,18 @@ function ConverterForm({ currencies, initialAmount, initialFromCurrency, initial
     setResult(null)
   }
 
+  const currenciesDisabled = isLoadingCurrencies || currencies.length === 0
+
   return (
     <form onSubmit={handleConvert}>
       <div className="conversion-fields">
         <div className="field-group">
           <label htmlFor="amount">Você envia</label>
           <div className="field-control amount-control">
-            <input
-              id="amount"
-              type="number"
-              min="0"
-              step="0.01"
-              value={amount}
-              onChange={handleAmountChange}
-            />
+            <input id="amount" type="number" min="0" step="0.01" value={amount} onChange={handleAmountChange} />
             <span className="field-divider" aria-hidden="true" />
-            <select id="from-currency" aria-label="Moeda de origem" value={fromCurrency} onChange={handleFromCurrencyChange}>
-              {currencies.map((currency) => (
-                <option key={currency.code} value={currency.code}>
-                  {currency.code}
-                </option>
-              ))}
+            <select id="from-currency" aria-label="Moeda de origem" value={fromCurrency} onChange={handleFromCurrencyChange} disabled={currenciesDisabled}>
+              {currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code}</option>)}
             </select>
           </div>
         </div>
@@ -82,25 +75,20 @@ function ConverterForm({ currencies, initialAmount, initialFromCurrency, initial
           <div className="field-control currency-control">
             <span className="result-placeholder">{result ?? '—'}</span>
             <span className="field-divider" aria-hidden="true" />
-            <select id="to-currency" aria-label="Moeda de destino" value={toCurrency} onChange={handleToCurrencyChange}>
-              {currencies.map((currency) => (
-                <option key={currency.code} value={currency.code}>
-                  {currency.code}
-                </option>
-              ))}
+            <select id="to-currency" aria-label="Moeda de destino" value={toCurrency} onChange={handleToCurrencyChange} disabled={currenciesDisabled}>
+              {currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code}</option>)}
             </select>
           </div>
         </div>
       </div>
 
-      <button className="convert-button" type="submit">Converter</button>
-
+      <button className="convert-button" type="submit" disabled={currenciesDisabled}>Converter</button>
       {error && <p className="form-error" role="alert">{error}</p>}
 
       <ResultPanel
         targetCurrency={toCurrency}
         result={result}
-        message="Taxas de demonstração para praticar a interação. A API Frankfurter será conectada depois."
+        message="A lista de moedas vem da API. As taxas usadas nesta etapa ainda são demonstrativas."
       />
     </form>
   )
