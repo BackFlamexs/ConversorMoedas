@@ -1,0 +1,156 @@
+{
+  "info": {
+    "_postman_id": "e23a3fa7-12da-4657-888b-2bc4aa12c04b",
+    "name": "Currency Exchange App — Frankfurter API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52982163",
+    "_collection_link": "https://go.postman.co/collection/52982163-e23a3fa7-12da-4657-888b-2bc4aa12c04b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "API-01 - Listar moedas",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.frankfurter.dev/v2/currencies",
+          "protocol": "https",
+          "host": [
+            "api",
+            "frankfurter",
+            "dev"
+          ],
+          "path": [
+            "v2",
+            "currencies"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-02 - Cotação EUR para USD",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.frankfurter.dev/v2/rate/eur/usd",
+          "protocol": "https",
+          "host": [
+            "api",
+            "frankfurter",
+            "dev"
+          ],
+          "path": [
+            "v2",
+            "rate",
+            "eur",
+            "usd"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-03 - Histórico EUR para US",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.frankfurter.dev/v2/rates?from=2026-10-01&to=2026-10-15&base=EUR&quotes=USD",
+          "protocol": "https",
+          "host": [
+            "api",
+            "frankfurter",
+            "dev"
+          ],
+          "path": [
+            "v2",
+            "rates"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2026-10-01"
+            },
+            {
+              "key": "to",
+              "value": "2026-10-15"
+            },
+            {
+              "key": "base",
+              "value": "EUR"
+            },
+            {
+              "key": "quotes",
+              "value": "USD"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-04 - Intervalo com fim de semana",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.frankfurter.dev/v2/rates?from=2026-10-09&to=2026-10-12&base=EUR&quotes=USD",
+          "protocol": "https",
+          "host": [
+            "api",
+            "frankfurter",
+            "dev"
+          ],
+          "path": [
+            "v2",
+            "rates"
+          ],
+          "query": [
+            {
+              "key": "from",
+              "value": "2026-10-09"
+            },
+            {
+              "key": "to",
+              "value": "2026-10-12"
+            },
+            {
+              "key": "base",
+              "value": "EUR"
+            },
+            {
+              "key": "quotes",
+              "value": "USD"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "API-05 - Código de moeda inválido",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://api.frankfurter.dev/v2/rate/xxx/usd",
+          "protocol": "https",
+          "host": [
+            "api",
+            "frankfurter",
+            "dev"
+          ],
+          "path": [
+            "v2",
+            "rate",
+            "xxx",
+            "usd"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
