@@ -25,6 +25,7 @@ function formatChartDate(date) {
 function HistorySection({ fromCurrency, toCurrency }) {
   const [selectedPeriod, setSelectedPeriod] = useState('7d')
   const [history, setHistory] = useState([])
+  const [filters, setFilters] = useState({ startDate: '', endDate: '', minRate: '', maxRate: '' })
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
   const [reloadCount, setReloadCount] = useState(0)
@@ -60,6 +61,34 @@ function HistorySection({ fromCurrency, toCurrency }) {
 
   const firstRecord = history[0]
   const lastRecord = history[history.length - 1]
+  const hasInvalidDateRange = filters.startDate && filters.endDate && filters.startDate > filters.endDate
+  const hasInvalidRateRange = filters.minRate !== '' && filters.maxRate !== ''
+    && Number(filters.minRate) > Number(filters.maxRate)
+  const filterError = hasInvalidDateRange
+    ? 'A data inicial deve ser anterior ou igual à data final.'
+    : hasInvalidRateRange
+      ? 'A cotação mínima deve ser menor ou igual à cotação máxima.'
+      : ''
+  const filteredHistory = filterError
+    ? []
+    : history.filter((record) => {
+      const matchesStartDate = !filters.startDate || record.date >= filters.startDate
+      const matchesEndDate = !filters.endDate || record.date <= filters.endDate
+      const matchesMinRate = filters.minRate === '' || record.rate >= Number(filters.minRate)
+      const matchesMaxRate = filters.maxRate === '' || record.rate <= Number(filters.maxRate)
+
+      return matchesStartDate && matchesEndDate && matchesMinRate && matchesMaxRate
+    })
+  const hasActiveFilters = Object.values(filters).some(Boolean)
+
+  function handleFilterChange(event) {
+    const { name, value } = event.target
+    setFilters((currentFilters) => ({ ...currentFilters, [name]: value }))
+  }
+
+  function clearFilters() {
+    setFilters({ startDate: '', endDate: '', minRate: '', maxRate: '' })
+  }
 
   return (
     <section className="history-section" aria-labelledby="history-title">
@@ -156,6 +185,34 @@ function HistorySection({ fromCurrency, toCurrency }) {
 
             <div className="history-table-section">
               <h3>Dados detalhados</h3>
+              <div className="history-filters" aria-label="Filtros do histórico">
+                <label className="history-filter-field" htmlFor="filter-start-date">
+                  <span>Data inicial</span>
+                  <input id="filter-start-date" name="startDate" type="date" value={filters.startDate} onChange={handleFilterChange} />
+                </label>
+                <label className="history-filter-field" htmlFor="filter-end-date">
+                  <span>Data final</span>
+                  <input id="filter-end-date" name="endDate" type="date" value={filters.endDate} onChange={handleFilterChange} />
+                </label>
+                <label className="history-filter-field" htmlFor="filter-min-rate">
+                  <span>Cotação mínima</span>
+                  <input id="filter-min-rate" name="minRate" type="number" min="0" step="any" placeholder="Ex.: 4,90" value={filters.minRate} onChange={handleFilterChange} />
+                </label>
+                <label className="history-filter-field" htmlFor="filter-max-rate">
+                  <span>Cotação máxima</span>
+                  <input id="filter-max-rate" name="maxRate" type="number" min="0" step="any" placeholder="Ex.: 5,20" value={filters.maxRate} onChange={handleFilterChange} />
+                </label>
+                <button className="clear-history-filters" type="button" onClick={clearFilters} disabled={!hasActiveFilters}>
+                  Limpar filtros
+                </button>
+              </div>
+
+              {filterError && <p className="history-filter-error" role="alert">{filterError}</p>}
+              <p className="history-result-count" aria-live="polite">
+                {filteredHistory.length} {filteredHistory.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}
+                {hasActiveFilters && !filterError && ` de ${history.length} registros`}
+              </p>
+
               <div className="history-table-wrapper">
                 <table className="history-table">
                   <thead>
@@ -167,14 +224,16 @@ function HistorySection({ fromCurrency, toCurrency }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {history.map((record) => (
-                      <tr key={`${record.date}-${record.base}-${record.quote}`}>
-                        <td>{formatDate(record.date)}</td>
-                        <td>{record.base || fromCurrency}</td>
-                        <td>{record.quote || toCurrency}</td>
-                        <td>{record.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })}</td>
-                      </tr>
-                    ))}
+                    {filteredHistory.length > 0 ? filteredHistory.map((record) => (
+                        <tr key={`${record.date}-${record.base}-${record.quote}`}>
+                          <td>{formatDate(record.date)}</td>
+                          <td>{record.base || fromCurrency}</td>
+                          <td>{record.quote || toCurrency}</td>
+                          <td>{record.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })}</td>
+                        </tr>
+                      )) : (
+                        <tr><td className="history-empty-cell" colSpan="4">Nenhum registro corresponde aos filtros.</td></tr>
+                      )}
                   </tbody>
                 </table>
               </div>
