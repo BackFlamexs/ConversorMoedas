@@ -12,9 +12,16 @@ const initialToCurrency = 'USD'
 
 function App() {
   const [currencies, setCurrencies] = useState([])
+  const [fromCurrency, setFromCurrency] = useState(initialFromCurrency)
+  const [toCurrency, setToCurrency] = useState(initialToCurrency)
   const [isLoadingCurrencies, setIsLoadingCurrencies] = useState(true)
   const [currencyError, setCurrencyError] = useState('')
   const [reloadCount, setReloadCount] = useState(0)
+
+  function handleSwapCurrencies() {
+    setFromCurrency(toCurrency)
+    setToCurrency(fromCurrency)
+  }
 
   useEffect(() => {
     let isActive = true
@@ -71,9 +78,12 @@ function App() {
         <ConverterForm
           currencies={currencies}
           isLoadingCurrencies={isLoadingCurrencies}
+          fromCurrency={fromCurrency}
+          toCurrency={toCurrency}
+          onFromCurrencyChange={setFromCurrency}
+          onToCurrencyChange={setToCurrency}
+          onSwapCurrencies={handleSwapCurrencies}
           initialAmount={initialAmount}
-          initialFromCurrency={initialFromCurrency}
-          initialToCurrency={initialToCurrency}
         />
 
         <div className="card-footer">

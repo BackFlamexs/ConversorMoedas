@@ -257,8 +257,20 @@
   margin-bottom: 14px;
   border: 1px solid var(--line);
   border-radius: 50%;
+  background: var(--surface);
   color: var(--accent);
   font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.swap-indicator:hover:not(:disabled) {
+  background: #edf4fc;
+  transform: rotate(180deg);
+}
+
+.swap-indicator:disabled {
+  cursor: not-allowed;
 }
 
 .convert-button {

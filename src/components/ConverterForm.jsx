@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 import ResultPanel from './ResultPanel.jsx'
 import { getLatestRate } from '../services/frankfurter.js'
 
-function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initialFromCurrency, initialToCurrency }) {
+function ConverterForm({ currencies, isLoadingCurrencies, fromCurrency, toCurrency, onFromCurrencyChange, onToCurrencyChange, onSwapCurrencies, initialAmount }) {
   const [amount, setAmount] = useState(initialAmount)
-  const [fromCurrency, setFromCurrency] = useState(initialFromCurrency)
-  const [toCurrency, setToCurrency] = useState(initialToCurrency)
   const [exchangeRate, setExchangeRate] = useState(null)
   const [isLoadingRate, setIsLoadingRate] = useState(true)
   const [rateError, setRateError] = useState('')
@@ -20,6 +18,8 @@ function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initial
       setIsLoadingRate(true)
       setRateError('')
       setExchangeRate(null)
+      setResult(null)
+      setError('')
 
       if (fromCurrency === toCurrency) {
         setExchangeRate({ base: fromCurrency, quote: toCurrency, rate: 1, date: null })
@@ -69,13 +69,13 @@ function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initial
   }
 
   function handleFromCurrencyChange(event) {
-    setFromCurrency(event.target.value)
+    onFromCurrencyChange(event.target.value)
     setResult(null)
     setError('')
   }
 
   function handleToCurrencyChange(event) {
-    setToCurrency(event.target.value)
+    onToCurrencyChange(event.target.value)
     setResult(null)
     setError('')
   }
@@ -100,7 +100,16 @@ function ConverterForm({ currencies, isLoadingCurrencies, initialAmount, initial
           </div>
         </div>
 
-        <div className="swap-indicator" aria-hidden="true">↔</div>
+        <button
+          className="swap-indicator"
+          type="button"
+          aria-label="Inverter moedas"
+          title="Inverter moedas"
+          onClick={onSwapCurrencies}
+          disabled={currenciesDisabled}
+        >
+          ↔
+        </button>
 
         <div className="field-group">
           <label htmlFor="to-currency">Você recebe</label>
