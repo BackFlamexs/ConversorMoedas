@@ -498,6 +498,58 @@
   margin-top: 20px;
 }
 
+.history-table-section {
+  margin-top: 32px;
+}
+
+.history-table-section h3 {
+  margin: 0 0 14px;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+
+.history-table-wrapper {
+  max-height: 440px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.history-table {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  text-align: left;
+}
+
+.history-table th,
+.history-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.history-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #eaf0f7;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.history-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.history-table tbody tr:hover {
+  background: #f4f8fc;
+}
+
 .history-error p {
   margin: 0 0 8px;
 }

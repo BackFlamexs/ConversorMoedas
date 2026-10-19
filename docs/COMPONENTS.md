@@ -26,7 +26,7 @@ main.jsx
 | `Hero` | `src/components/Hero.jsx` | `src/components/Hero.module.css` | Apresentar o título e a descrição da ferramenta. | `eyebrow`, `titleStart`, `titleHighlight`, `description` | Nenhum. | Filho de `App`. |
 | `ConverterForm` | `src/components/ConverterForm.jsx` | `src/components/ConverterForm.module.css` | Capturar o valor, permitir selecionar ou inverter moedas, buscar a taxa atual e calcular a conversão. | `currencies`, `fromCurrency`, `toCurrency`, callbacks de alteração/inversão, `initialAmount`, estado de carregamento das moedas. | Valor, cotação, loading e erros da cotação, resultado e erro de validação. | Filho de `App`; renderiza `ResultPanel`. |
 | `ResultPanel` | `src/components/ResultPanel.jsx` | `src/components/ResultPanel.module.css` | Exibir o resultado, a taxa utilizada, a data efetiva e estados de carregamento/erro da cotação. | Moedas, resultado, taxa, data, estados e callback de nova tentativa. | Nenhum. Recebe dados por props. | Filho de `ConverterForm`. |
-| `HistorySection` | `src/components/HistorySection.jsx` | `src/components/HistorySection.module.css` | Selecionar o período, consultar o histórico do par e exibir estados, resumo e gráfico de cotações. | `fromCurrency`, `toCurrency` | Período, registros, loading, erro e tentativa de recarga. | Filho de `App`; compartilha o par selecionado com `ConverterForm`. |
+| `HistorySection` | `src/components/HistorySection.jsx` | `src/components/HistorySection.module.css` | Selecionar o período, consultar o histórico do par e exibir resumo, gráfico e tabela de cotações. | `fromCurrency`, `toCurrency` | Período, registros, loading, erro e tentativa de recarga. | Filho de `App`; compartilha o par selecionado com `ConverterForm`. |
 | `PageFooter` | `src/components/PageFooter.jsx` | `src/components/PageFooter.module.css` | Exibir a identificação e a descrição do projeto no rodapé. | `projectName`, `description` | Nenhum. | Filho de `App`. |
 
 ## Props e fluxo atual de dados
@@ -35,7 +35,7 @@ main.jsx
 2. `App` mantém origem e destino em estado e passa os valores e callbacks para `ConverterForm` e `HistorySection`.
 3. `ConverterForm` envia alterações de seleção ao `App`; o botão de inversão troca o par no estado compartilhado.
 4. Quando o par muda, `ConverterForm` consulta a taxa atual com `getLatestRate` e `HistorySection` consulta a série histórica com `getHistoricalRates`.
-5. `HistorySection` mantém o período selecionado e recalcula o intervalo de datas antes de buscar os dados. O componente apresenta um resumo enquanto o gráfico e a tabela ainda serão implementados.
+5. `HistorySection` mantém o período selecionado, recalcula o intervalo de datas antes de buscar os dados e apresenta os registros no gráfico e na tabela.
 6. Ao enviar o formulário, `ConverterForm` calcula o valor usando a taxa recebida e passa cotação, data e resultado para `ResultPanel`.
 
 Esse fluxo aplica lifting state up: o par está no ancestral comum (`App`) para ser compartilhado entre o conversor e a análise histórica.

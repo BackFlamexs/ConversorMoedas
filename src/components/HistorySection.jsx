@@ -83,7 +83,7 @@ function HistorySection({ fromCurrency, toCurrency }) {
         ))}
       </div>
 
-      <div className="history-card" aria-live="polite">
+      <div className="history-card">
         <div className="history-card-heading">
           <span>{fromCurrency} → {toCurrency}</span>
           <span>{periods.find((period) => period.value === selectedPeriod)?.label}</span>
@@ -152,6 +152,32 @@ function HistorySection({ fromCurrency, toCurrency }) {
                   />
                 </LineChart>
               </ResponsiveContainer>
+            </div>
+
+            <div className="history-table-section">
+              <h3>Dados detalhados</h3>
+              <div className="history-table-wrapper">
+                <table className="history-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Data</th>
+                      <th scope="col">Moeda de origem</th>
+                      <th scope="col">Moeda de destino</th>
+                      <th scope="col">Cotação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {history.map((record) => (
+                      <tr key={`${record.date}-${record.base}-${record.quote}`}>
+                        <td>{formatDate(record.date)}</td>
+                        <td>{record.base || fromCurrency}</td>
+                        <td>{record.quote || toCurrency}</td>
+                        <td>{record.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </>
         )}
