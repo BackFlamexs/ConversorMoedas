@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
 import ConverterForm from './components/ConverterForm.jsx'
 import HistorySection from './components/HistorySection.jsx'
 import PageFooter from './components/PageFooter.jsx'
-import { getCurrencies } from './services/frankfurter.js'
+import { useCurrencies } from './hooks/useCurrencies.js'
 import './App.css'
 
 const initialAmount = '100'
@@ -12,38 +12,14 @@ const initialFromCurrency = 'BRL'
 const initialToCurrency = 'USD'
 
 function App() {
-  const [currencies, setCurrencies] = useState([])
   const [fromCurrency, setFromCurrency] = useState(initialFromCurrency)
   const [toCurrency, setToCurrency] = useState(initialToCurrency)
-  const [isLoadingCurrencies, setIsLoadingCurrencies] = useState(true)
-  const [currencyError, setCurrencyError] = useState('')
-  const [reloadCount, setReloadCount] = useState(0)
+  const { currencies, isLoading: isLoadingCurrencies, error: currencyError, retry: retryCurrencies } = useCurrencies()
 
   function handleSwapCurrencies() {
     setFromCurrency(toCurrency)
     setToCurrency(fromCurrency)
   }
-
-  useEffect(() => {
-    let isActive = true
-
-    async function loadCurrencies() {
-      setIsLoadingCurrencies(true)
-      setCurrencyError('')
-
-      try {
-        const currencyList = await getCurrencies()
-        if (isActive) setCurrencies(currencyList)
-      } catch (error) {
-        if (isActive) setCurrencyError(error.message || 'Ocorreu um erro ao carregar as moedas.')
-      } finally {
-        if (isActive) setIsLoadingCurrencies(false)
-      }
-    }
-
-    loadCurrencies()
-    return () => { isActive = false }
-  }, [reloadCount])
 
   return (
     <main className="app-shell">
@@ -70,7 +46,7 @@ function App() {
         {currencyError && (
           <div className="api-error" role="alert">
             <p>{currencyError}</p>
-            <button type="button" onClick={() => setReloadCount((count) => count + 1)}>
+            <button type="button" onClick={retryCurrencies}>
               Tentar novamente
             </button>
           </div>

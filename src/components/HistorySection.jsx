@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { getHistoricalRates } from '../services/frankfurter.js'
-import { getDateRange } from '../utils/dateRanges.js'
+import { useHistoricalRates } from '../hooks/useHistoricalRates.js'
 
 const periods = [
   { value: '7d', label: '7 dias' },
@@ -24,41 +23,13 @@ function formatChartDate(date) {
 
 function HistorySection({ fromCurrency, toCurrency }) {
   const [selectedPeriod, setSelectedPeriod] = useState('7d')
-  const [history, setHistory] = useState([])
   const [filters, setFilters] = useState({ startDate: '', endDate: '', minRate: '', maxRate: '' })
   const [sortConfig, setSortConfig] = useState({ field: 'date', direction: 'desc' })
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [reloadCount, setReloadCount] = useState(0)
-
-  useEffect(() => {
-    let isActive = true
-
-    async function loadHistory() {
-      setIsLoading(true)
-      setError('')
-      setHistory([])
-
-      if (fromCurrency === toCurrency) {
-        setError('Selecione duas moedas diferentes para consultar o histórico.')
-        setIsLoading(false)
-        return
-      }
-
-      try {
-        const { startDate, endDate } = getDateRange(selectedPeriod)
-        const historyData = await getHistoricalRates(fromCurrency, toCurrency, startDate, endDate)
-        if (isActive) setHistory(historyData)
-      } catch (fetchError) {
-        if (isActive) setError(fetchError.message || 'Ocorreu um erro ao carregar o histórico.')
-      } finally {
-        if (isActive) setIsLoading(false)
-      }
-    }
-
-    loadHistory()
-    return () => { isActive = false }
-  }, [fromCurrency, toCurrency, selectedPeriod, reloadCount])
+  const { history, isLoading, error, retry: retryHistory } = useHistoricalRates(
+    fromCurrency,
+    toCurrency,
+    selectedPeriod,
+  )
 
   const firstRecord = history[0]
   const lastRecord = history[history.length - 1]
@@ -96,6 +67,33 @@ function HistorySection({ fromCurrency, toCurrency }) {
 
   function clearFilters() {
     setFilters({ startDate: '', endDate: '', minRate: '', maxRate: '' })
+  }
+
+  function exportHistoryCsv() {
+    if (sortedHistory.length === 0) return
+
+    const csvCell = (value) => `"${String(value).replaceAll('"', '""')}"`
+    const rows = [
+      ['Data', 'Moeda de origem', 'Moeda de destino', 'Cota\u00e7\u00e3o'],
+      ...sortedHistory.map((record) => [
+        record.date,
+        record.base || fromCurrency,
+        record.quote || toCurrency,
+        record.rate,
+      ]),
+    ]
+    const csvContent = `\uFEFF${rows.map((row) => row.map(csvCell).join(',')).join('\r\n')}`
+    const file = new Blob([csvContent], { type: 'text/csv;charset=utf-8' })
+    const fileUrl = URL.createObjectURL(file)
+    const downloadLink = document.createElement('a')
+    const periodLabel = selectedPeriod
+
+    downloadLink.href = fileUrl
+    downloadLink.download = `historico-${fromCurrency}-${toCurrency}-${periodLabel}.csv`
+    document.body.appendChild(downloadLink)
+    downloadLink.click()
+    downloadLink.remove()
+    window.setTimeout(() => URL.revokeObjectURL(fileUrl), 1000)
   }
 
   function handleSort(field) {
@@ -144,7 +142,7 @@ function HistorySection({ fromCurrency, toCurrency }) {
           <div className="history-error" role="alert">
             <p>{error}</p>
             {fromCurrency !== toCurrency && (
-              <button type="button" onClick={() => setReloadCount((count) => count + 1)}>Tentar novamente</button>
+              <button type="button" onClick={retryHistory}>Tentar novamente</button>
             )}
           </div>
         )}
@@ -224,6 +222,14 @@ function HistorySection({ fromCurrency, toCurrency }) {
                 </label>
                 <button className="clear-history-filters" type="button" onClick={clearFilters} disabled={!hasActiveFilters}>
                   Limpar filtros
+                </button>
+                <button
+                  className="export-history-button"
+                  type="button"
+                  onClick={exportHistoryCsv}
+                  disabled={sortedHistory.length === 0}
+                >
+                  Exportar CSV ({sortedHistory.length})
                 </button>
               </div>
 

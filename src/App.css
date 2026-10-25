@@ -510,7 +510,7 @@
 
 .history-filters {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto auto;
   align-items: end;
   gap: 12px;
   margin-bottom: 16px;
@@ -552,6 +552,28 @@
 
 .clear-history-filters:disabled {
   color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.export-history-button {
+  min-height: 40px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.export-history-button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.export-history-button:disabled {
+  background: #93b4ec;
   cursor: not-allowed;
 }
 
