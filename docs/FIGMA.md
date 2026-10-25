@@ -56,3 +56,7 @@ Em 18/10/2026, foram revisadas capturas da visualização desktop nos estados pa
 - Abrir e revisar visualmente os estados de carregamento, erro e ausência de dados.
 - Confirmar no Figma que wireframes de baixa fidelidade e telas de média fidelidade estão organizados separadamente.
 - Confirmar que os valores de exemplo permanecem identificados como fictícios e que os dados reais ocuparão esses mesmos espaços.
+
+### Acesso nesta etapa
+
+Em 25/10/2026, o link do arquivo Figma não pôde ser aberto pela ferramenta web disponível nesta sessão, e não há integração Figma conectada. Portanto, as telas mobile, a separação entre páginas e os estados no arquivo vivo não foram revisados nesta etapa. Os SVGs locais podem ser consultados, mas não substituem a revisão do arquivo Figma nem evidências exportadas. As capturas continuam pendentes em `docs/figma/evidencias/`.

@@ -52,7 +52,7 @@
       "response": []
     },
     {
-      "name": "API-03 - Histórico EUR para US",
+      "name": "API-03 - Histórico EUR para USD",
       "request": {
         "method": "GET",
         "header": [],
