@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ResultPanel from './ResultPanel.jsx'
 import { getLatestRate } from '../services/frankfurter.js'
+import styles from './ConverterForm.module.css'
 
 function ConverterForm({ currencies, isLoadingCurrencies, fromCurrency, toCurrency, onFromCurrencyChange, onToCurrencyChange, onSwapCurrencies, initialAmount }) {
   const [amount, setAmount] = useState(initialAmount)
@@ -88,12 +89,12 @@ function ConverterForm({ currencies, isLoadingCurrencies, fromCurrency, toCurren
 
   return (
     <form onSubmit={handleConvert}>
-      <div className="conversion-fields">
-        <div className="field-group">
+      <div className={styles.conversionFields}>
+        <div className={styles.fieldGroup}>
           <label htmlFor="amount">Você envia</label>
-          <div className="field-control amount-control">
+          <div className={styles.fieldControl}>
             <input id="amount" type="number" min="0" step="0.01" value={amount} onChange={handleAmountChange} />
-            <span className="field-divider" aria-hidden="true" />
+            <span className={styles.fieldDivider} aria-hidden="true" />
             <select id="from-currency" aria-label="Moeda de origem" value={fromCurrency} onChange={handleFromCurrencyChange} disabled={currenciesDisabled}>
               {currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code}</option>)}
             </select>
@@ -101,7 +102,7 @@ function ConverterForm({ currencies, isLoadingCurrencies, fromCurrency, toCurren
         </div>
 
         <button
-          className="swap-indicator"
+          className={styles.swapIndicator}
           type="button"
           aria-label="Inverter moedas"
           title="Inverter moedas"
@@ -111,11 +112,11 @@ function ConverterForm({ currencies, isLoadingCurrencies, fromCurrency, toCurren
           ↔
         </button>
 
-        <div className="field-group">
+        <div className={styles.fieldGroup}>
           <label htmlFor="to-currency">Você recebe</label>
-          <div className="field-control currency-control">
-            <span className="result-placeholder">{result ?? '—'}</span>
-            <span className="field-divider" aria-hidden="true" />
+          <div className={styles.fieldControl}>
+            <span className={styles.resultPlaceholder}>{result ?? '—'}</span>
+            <span className={styles.fieldDivider} aria-hidden="true" />
             <select id="to-currency" aria-label="Moeda de destino" value={toCurrency} onChange={handleToCurrencyChange} disabled={currenciesDisabled}>
               {currencies.map((currency) => <option key={currency.code} value={currency.code}>{currency.code}</option>)}
             </select>
@@ -123,10 +124,10 @@ function ConverterForm({ currencies, isLoadingCurrencies, fromCurrency, toCurren
         </div>
       </div>
 
-      <button className="convert-button" type="submit" disabled={convertDisabled}>
+      <button className={styles.convertButton} type="submit" disabled={convertDisabled}>
         {isLoadingRate ? 'Consultando cotação...' : 'Converter'}
       </button>
-      {error && <p className="form-error" role="alert">{error}</p>}
+      {error && <p className={styles.formError} role="alert">{error}</p>}
 
       <ResultPanel
         targetCurrency={toCurrency}

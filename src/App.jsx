@@ -5,7 +5,7 @@ import ConverterForm from './components/ConverterForm.jsx'
 import HistorySection from './components/HistorySection.jsx'
 import PageFooter from './components/PageFooter.jsx'
 import { useCurrencies } from './hooks/useCurrencies.js'
-import './App.css'
+import styles from './App.module.css'
 
 const initialAmount = '100'
 const initialFromCurrency = 'BRL'
@@ -22,7 +22,7 @@ function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={styles.appShell}>
       <Header brandName="câmbio" />
 
       <Hero
@@ -32,19 +32,19 @@ function App() {
         description="Converta valores entre moedas e acompanhe as taxas de câmbio em um só lugar."
       />
 
-      <section className="converter-card" aria-labelledby="converter-title">
-        <div className="card-heading">
+      <section className={styles.converterCard} aria-labelledby="converter-title">
+        <div className={styles.cardHeading}>
           <div>
-            <p className="section-kicker">CONVERSOR</p>
+            <p className={styles.sectionKicker}>CONVERSOR</p>
             <h2 id="converter-title">Faça uma conversão</h2>
           </div>
-          <span className="date-badge">Moedas da Frankfurter</span>
+          <span className={styles.dateBadge}>Moedas da Frankfurter</span>
         </div>
 
-        {isLoadingCurrencies && <p className="api-status" role="status">Carregando moedas disponíveis...</p>}
+        {isLoadingCurrencies && <p className={styles.apiStatus} role="status">Carregando moedas disponíveis...</p>}
 
         {currencyError && (
-          <div className="api-error" role="alert">
+          <div className={styles.apiError} role="alert">
             <p>{currencyError}</p>
             <button type="button" onClick={retryCurrencies}>
               Tentar novamente
@@ -63,8 +63,8 @@ function App() {
           initialAmount={initialAmount}
         />
 
-        <div className="card-footer">
-          <span><span className="secure-dot" /> Sem taxas escondidas</span>
+        <div className={styles.cardFooter}>
+          <span><span className={styles.secureDot} /> Sem taxas escondidas</span>
           <span>Lista de moedas obtida pela API Frankfurter</span>
         </div>
       </section>

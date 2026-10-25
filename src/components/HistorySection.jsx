@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { useHistoricalRates } from '../hooks/useHistoricalRates.js'
+import styles from './HistorySection.module.css'
 
 const periods = [
   { value: '7d', label: '7 dias' },
@@ -109,19 +110,19 @@ function HistorySection({ fromCurrency, toCurrency }) {
   }
 
   return (
-    <section className="history-section" aria-labelledby="history-title">
-      <div className="history-heading">
-        <p className="section-kicker">ANÁLISE</p>
+    <section className={styles.historySection} aria-labelledby="history-title">
+      <div className={styles.historyHeading}>
+        <p className={styles.sectionKicker}>ANÁLISE</p>
         <h2 id="history-title">Histórico de cotação</h2>
         <p>Acompanhe a variação de {fromCurrency}/{toCurrency} ao longo do tempo.</p>
       </div>
 
-      <div className="period-selector" role="group" aria-label="Período do histórico">
+      <div className={styles.periodSelector} role="group" aria-label="Período do histórico">
         {periods.map((period) => (
           <button
             key={period.value}
             type="button"
-            className={selectedPeriod === period.value ? 'period-button is-selected' : 'period-button'}
+            className={selectedPeriod === period.value ? `${styles.periodButton} ${styles.isSelected}` : styles.periodButton}
             aria-pressed={selectedPeriod === period.value}
             onClick={() => setSelectedPeriod(period.value)}
           >
@@ -130,16 +131,16 @@ function HistorySection({ fromCurrency, toCurrency }) {
         ))}
       </div>
 
-      <div className="history-card">
-        <div className="history-card-heading">
+      <div className={styles.historyCard}>
+        <div className={styles.historyCardHeading}>
           <span>{fromCurrency} → {toCurrency}</span>
           <span>{periods.find((period) => period.value === selectedPeriod)?.label}</span>
         </div>
 
-        {isLoading && <p className="history-message" role="status">Carregando cotações históricas...</p>}
+        {isLoading && <p className={styles.historyMessage} role="status">Carregando cotações históricas...</p>}
 
         {!isLoading && error && (
-          <div className="history-error" role="alert">
+          <div className={styles.historyError} role="alert">
             <p>{error}</p>
             {fromCurrency !== toCurrency && (
               <button type="button" onClick={retryHistory}>Tentar novamente</button>
@@ -148,18 +149,18 @@ function HistorySection({ fromCurrency, toCurrency }) {
         )}
 
         {!isLoading && !error && history.length === 0 && (
-          <p className="history-message">Não há cotações disponíveis para esse período.</p>
+          <p className={styles.historyMessage}>Não há cotações disponíveis para esse período.</p>
         )}
 
         {!isLoading && !error && history.length > 0 && (
           <>
-            <div className="history-summary">
+            <div className={styles.historySummary}>
               <p><strong>{history.length}</strong> registros recebidos da API</p>
               <p>Intervalo retornado: {formatDate(firstRecord.date)} a {formatDate(lastRecord.date)}</p>
               <p>Cotação mais recente no intervalo: {lastRecord.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })} {toCurrency}</p>
             </div>
 
-            <div className="history-chart" role="img" aria-label={`Gráfico histórico de ${fromCurrency} para ${toCurrency}`}>
+            <div className={styles.historyChart} role="img" aria-label={`Gráfico histórico de ${fromCurrency} para ${toCurrency}`}>
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={history} margin={{ top: 18, right: 12, bottom: 4, left: 4 }}>
                   <CartesianGrid stroke="#dbe6f1" strokeDasharray="4 5" vertical={false} />
@@ -201,30 +202,30 @@ function HistorySection({ fromCurrency, toCurrency }) {
               </ResponsiveContainer>
             </div>
 
-            <div className="history-table-section">
+            <div className={styles.historyTableSection}>
               <h3>Dados detalhados</h3>
-              <div className="history-filters" aria-label="Filtros do histórico">
-                <label className="history-filter-field" htmlFor="filter-start-date">
+              <div className={styles.historyFilters} aria-label="Filtros do histórico">
+                <label className={styles.historyFilterField} htmlFor="filter-start-date">
                   <span>Data inicial</span>
                   <input id="filter-start-date" name="startDate" type="date" value={filters.startDate} onChange={handleFilterChange} />
                 </label>
-                <label className="history-filter-field" htmlFor="filter-end-date">
+                <label className={styles.historyFilterField} htmlFor="filter-end-date">
                   <span>Data final</span>
                   <input id="filter-end-date" name="endDate" type="date" value={filters.endDate} onChange={handleFilterChange} />
                 </label>
-                <label className="history-filter-field" htmlFor="filter-min-rate">
+                <label className={styles.historyFilterField} htmlFor="filter-min-rate">
                   <span>Cotação mínima</span>
                   <input id="filter-min-rate" name="minRate" type="number" min="0" step="any" placeholder="Ex.: 4,90" value={filters.minRate} onChange={handleFilterChange} />
                 </label>
-                <label className="history-filter-field" htmlFor="filter-max-rate">
+                <label className={styles.historyFilterField} htmlFor="filter-max-rate">
                   <span>Cotação máxima</span>
                   <input id="filter-max-rate" name="maxRate" type="number" min="0" step="any" placeholder="Ex.: 5,20" value={filters.maxRate} onChange={handleFilterChange} />
                 </label>
-                <button className="clear-history-filters" type="button" onClick={clearFilters} disabled={!hasActiveFilters}>
+                <button className={styles.clearHistoryFilters} type="button" onClick={clearFilters} disabled={!hasActiveFilters}>
                   Limpar filtros
                 </button>
                 <button
-                  className="export-history-button"
+                  className={styles.exportHistoryButton}
                   type="button"
                   onClick={exportHistoryCsv}
                   disabled={sortedHistory.length === 0}
@@ -233,25 +234,25 @@ function HistorySection({ fromCurrency, toCurrency }) {
                 </button>
               </div>
 
-              {filterError && <p className="history-filter-error" role="alert">{filterError}</p>}
-              <p className="history-result-count" aria-live="polite">
+              {filterError && <p className={styles.historyFilterError} role="alert">{filterError}</p>}
+              <p className={styles.historyResultCount} aria-live="polite">
                 {filteredHistory.length} {filteredHistory.length === 1 ? 'resultado encontrado' : 'resultados encontrados'}
                 {hasActiveFilters && !filterError && ` de ${history.length} registros`}
               </p>
 
-              <div className="history-table-wrapper">
-                <table className="history-table">
+              <div className={styles.historyTableWrapper}>
+                <table className={styles.historyTable}>
                   <thead>
                     <tr>
                       <th scope="col" aria-sort={sortConfig.field === 'date' ? (sortConfig.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
-                        <button className="sort-header-button" type="button" onClick={() => handleSort('date')}>
+                        <button className={styles.sortHeaderButton} type="button" onClick={() => handleSort('date')}>
                           Data <span aria-hidden="true">{getSortIndicator('date')}</span>
                         </button>
                       </th>
                       <th scope="col">Moeda de origem</th>
                       <th scope="col">Moeda de destino</th>
                       <th scope="col" aria-sort={sortConfig.field === 'rate' ? (sortConfig.direction === 'asc' ? 'ascending' : 'descending') : 'none'}>
-                        <button className="sort-header-button" type="button" onClick={() => handleSort('rate')}>
+                        <button className={styles.sortHeaderButton} type="button" onClick={() => handleSort('rate')}>
                           Cotação <span aria-hidden="true">{getSortIndicator('rate')}</span>
                         </button>
                       </th>
@@ -266,7 +267,7 @@ function HistorySection({ fromCurrency, toCurrency }) {
                           <td>{record.rate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })}</td>
                         </tr>
                       )) : (
-                        <tr><td className="history-empty-cell" colSpan="4">Nenhum registro corresponde aos filtros.</td></tr>
+                        <tr><td className={styles.historyEmptyCell} colSpan="4">Nenhum registro corresponde aos filtros.</td></tr>
                       )}
                   </tbody>
                 </table>

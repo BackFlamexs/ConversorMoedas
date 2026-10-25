@@ -1,0 +1,109 @@
+.conversionFields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 42px minmax(0, 1fr);
+  align-items: end;
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.fieldGroup label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 550;
+}
+
+.fieldControl {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+}
+
+.fieldControl:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+}
+
+.fieldControl input,
+.resultPlaceholder {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.fieldControl input::-webkit-inner-spin-button,
+.fieldControl input::-webkit-outer-spin-button { margin: 0; appearance: none; }
+.fieldControl input { appearance: textfield; }
+.resultPlaceholder { color: var(--text-muted); }
+
+.fieldDivider {
+  width: 1px;
+  height: 28px;
+  margin: 0 14px;
+  background: var(--line);
+}
+
+.fieldControl select {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.fieldControl select option { background: #ffffff; color: #16324f; }
+
+.swapIndicator {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.swapIndicator:hover:not(:disabled) { background: #edf4fc; transform: rotate(180deg); }
+.swapIndicator:disabled { cursor: not-allowed; }
+
+.convertButton {
+  width: 100%;
+  min-height: 52px;
+  margin-top: 20px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.convertButton:hover { background: #1d4ed8; transform: translateY(-1px); }
+.convertButton:disabled { background: #93b4ec; cursor: not-allowed; transform: none; }
+.formError { margin: 12px 0 0; color: #ff9d9d; font-size: 0.82rem; }
+
+@media (max-width: 650px) {
+  .conversionFields { grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 26px; }
+  .swapIndicator { margin: -2px auto; transform: rotate(90deg); }
+}

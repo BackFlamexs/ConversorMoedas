@@ -1,24 +1,26 @@
+import styles from './ResultPanel.module.css'
+
 function ResultPanel({ targetCurrency, result, baseCurrency, exchangeRate, quoteDate, isLoadingRate, rateError, onRetryRate }) {
   const formattedRate = typeof exchangeRate === 'number'
     ? exchangeRate.toLocaleString('pt-BR', { maximumFractionDigits: 6 })
     : null
 
   return (
-    <section className="result-panel" aria-label="Resultado da conversão">
-      <div className="result-heading">
-        <span className="result-label">VALOR CONVERTIDO</span>
-        <span className="result-currency">{targetCurrency}</span>
+    <section className={styles.resultPanel} aria-label="Resultado da conversão">
+      <div className={styles.resultHeading}>
+        <span className={styles.resultLabel}>VALOR CONVERTIDO</span>
+        <span className={styles.resultCurrency}>{targetCurrency}</span>
       </div>
-      <output className="result-value">{result ?? '—'}</output>
+      <output className={styles.resultValue}>{result ?? '—'}</output>
 
-      <div className="rate-note" aria-live="polite">
-        <span className="rate-icon" aria-hidden="true">i</span>
+      <div className={styles.rateNote} aria-live="polite">
+        <span className={styles.rateIcon} aria-hidden="true">i</span>
         <div>
           {isLoadingRate && <p>Consultando a cotação atual...</p>}
           {!isLoadingRate && rateError && (
             <>
               <p>{rateError}</p>
-              <button className="retry-rate-button" type="button" onClick={onRetryRate}>Tentar novamente</button>
+              <button className={styles.retryRateButton} type="button" onClick={onRetryRate}>Tentar novamente</button>
             </>
           )}
           {!isLoadingRate && !rateError && formattedRate && (

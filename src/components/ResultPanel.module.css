@@ -1,0 +1,51 @@
+.resultPanel {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-raised);
+}
+
+.resultHeading { display: flex; align-items: center; justify-content: space-between; }
+.resultLabel { color: var(--text-muted); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; }
+.resultCurrency { color: var(--accent); font-size: 0.78rem; font-weight: 750; }
+.resultValue { display: block; margin-top: 8px; color: var(--text-primary); font-size: 2rem; font-weight: 650; letter-spacing: -0.05em; }
+
+.rateNote {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #edf4fc;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.rateNote p { margin: 0; }
+.rateNote p + p { margin-top: 4px; }
+
+.retryRateButton {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1d4ed8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rateIcon {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  display: grid;
+  place-items: center;
+  margin-top: 1px;
+  border: 1px solid var(--text-muted);
+  border-radius: 50%;
+  font-size: 0.65rem;
+  font-weight: 700;
+}

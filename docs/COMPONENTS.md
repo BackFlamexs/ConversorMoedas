@@ -48,7 +48,7 @@ Esse fluxo aplica lifting state up: o par está no ancestral comum (`App`) para 
 
 ## CSS Modules
 
-Atualmente, os estilos estão em `src/App.css` e `src/index.css`, portanto ainda são globais. O briefing exige CSS Modules. A coluna "CSS Module planejado" registra a organização proposta para a migração; os módulos correspondentes ainda não foram criados. `index.css` poderá permanecer com estilos globais mínimos, como reset e variáveis de tema.
+Os estilos específicos de cada parte da interface estão em arquivos `.module.css` junto aos componentes. `src/App.module.css` mantém o layout geral e o cartão do conversor. `src/index.css` contém apenas variáveis de tema, reset, estilos-base dos controles e a altura mínima do elemento `root`.
 
 ## Convenções
 

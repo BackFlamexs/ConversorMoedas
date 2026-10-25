@@ -1,11 +1,13 @@
+import styles from './Header.module.css'
+
 function Header({ brandName }) {
   return (
-    <header className="topbar">
-      <a className="brand" href="#inicio" aria-label={`${brandName}, início`}>
-        <span className="brand-mark" aria-hidden="true">↗</span>
-        <span>{brandName}<span className="brand-dot">.</span></span>
+    <header className={styles.topbar}>
+      <a className={styles.brand} href="#inicio" aria-label={`${brandName}, início`}>
+        <span className={styles.brandMark} aria-hidden="true">↗</span>
+        <span>{brandName}<span className={styles.brandDot}>.</span></span>
       </a>
-      <span className="topbar-label">CONVERSOR DE MOEDAS</span>
+      <span className={styles.topbarLabel}>CONVERSOR DE MOEDAS</span>
     </header>
   )
 }
