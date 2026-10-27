@@ -38,7 +38,20 @@
   letter-spacing: 0.12em;
 }
 
+.topbarActions { display: flex; align-items: center; gap: 18px; }
+.languageSelector { display: flex; align-items: center; gap: 5px; }
+.languageButton {
+  width: 30px; height: 30px; display: grid; place-items: center; padding: 0;
+  border: 1px solid transparent; border-radius: 7px; background: transparent;
+  font-size: 1rem; line-height: 1; cursor: pointer;
+}
+.languageButton:hover { background: #eaf0f7; }
+.languageButton[aria-pressed="true"] { border-color: var(--line); background: var(--surface); box-shadow: 0 1px 4px rgb(22 50 79 / 10%); }
+
 @media (max-width: 650px) {
   .topbar { min-height: 72px; }
-  .topbarLabel { font-size: 0.58rem; }
+  .topbarLabel { font-size: 0.5rem; }
+  .topbarActions { gap: 8px; }
+  .languageSelector { gap: 2px; }
+  .languageButton { width: 27px; height: 28px; font-size: 0.9rem; }
 }
